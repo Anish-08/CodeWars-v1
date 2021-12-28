@@ -50,10 +50,15 @@ def ActRobot(robot):
 
         ##getting location of base
         if inisig[2] == 0: xb = int(inisig[3])
+        
         else : xb = int(inisig[2]+inisig[3])
 
         if inisig[4] == 0: yb = int(inisig[5])
         else : yb = int(inisig[4]+inisig[5])
+        
+        vert = (yb>=20)
+        horiz = (xb>=20)
+
 
         totalvirus = robot.GetVirus()
 
@@ -74,11 +79,19 @@ def ActRobot(robot):
                     elif inisig[1]=='E':
                         T = Goto(x,y,xb-2,yb)
                     elif inisig[1]=='F':
-                        T = Goto(x,y,xb-1,yb)
+                        T = Goto(x,y,xb+2,yb)
                     elif inisig[1] == 'G':
                         T = Goto(x,y,xb,yb-2)
                     elif inisig[1] == 'H':
                         T = Goto(x,y,xb,yb+2)
+                    elif inisig[1] == 'I' and horiz:
+                        T = Goto(x,y,xb-1,yb)
+                    elif inisig[1] == 'I' :
+                        T = Goto(x,y,xb+1,yb)
+                    elif inisig[1] == 'J' and vert:
+                        T = Goto(x,y,xb,yb-1)
+                    elif inisig[1] == 'J' :
+                        T = Goto(x,y,xb,yb+1)
                 else: 
                     if x == xb:
                         if xb >= 20: T = 2
@@ -157,17 +170,20 @@ def ActBase(base):
 
     #maaking robots
     el = base.GetElixir()
-    if el > TEl-400:
+    if el > TEl-500:
         x = (TEl-el)//50 + 1
         base.create_robot('d'+str(chr(x+64))+loc)
-    elif el > TEl - 600:  
-        x = (TEl - 400 -el)//50 + 1
+    elif el > TEl - 700:  
+        x = (TEl - 500 -el)//50 + 1
         base.create_robot('c'+str(x)+loc)
-    elif el > TEl - 1300:
-        x = (TEl - 600 - el)//50 + 1
+    elif el > TEl - 1200:
+        x = (TEl - 700 - el)//50 + 1
         base.create_robot('m'+str(x)+loc)
-    elif el > TEl/20 :  
-        x = (TEl - 1300 -el)//50 + 1
+    elif TEl/20> 50 and el > TEl/20-50 :  
+        x = (TEl - 1200 -el)//50 + 1
+        base.create_robot('a'+str(x)+loc)
+    elif TEl/20 <= 50 and el > TEl/20 :
+        x = (TEl - 1200 -el)//50 + 1
         base.create_robot('a'+str(x)+loc)
 
 
